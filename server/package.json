@@ -18,7 +18,8 @@
   "scripts": {
     "start": "node dist",
     "dev": "ts-node-dev src",
-    "postinstall": "yarn tsc"
+    "postinstall": "yarn tsc",
+    "publishToHeroku": "cd ../ && git subtree push --prefix server heroku main || true"
   },
   "devDependencies": {
     "@types/ws": "^8.2.0"
