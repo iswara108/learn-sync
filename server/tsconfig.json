@@ -1,10 +1,31 @@
 {
-  "extends": "../tsconfig.json",
-  "include": ["./src/**/*.tsx", "./src/**/*.ts"],
-  "exclude": ["node_modules"],
   "compilerOptions": {
+    "target": "ESNext",
+    "module": "commonjs",
+    "lib": ["dom", "es6", "ES2021", "esnext.asynciterable"],
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "removeComments": true,
+    "noImplicitAny": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "typeRoots": ["./node_modules/@types"],
     "outDir": "./dist",
-    "strictPropertyInitialization": false,
-    "typeRoots": ["./src/@types"]
-  }
+    "strictPropertyInitialization": false
+  },
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.tsx", "./src/**/*.ts"]
 }
