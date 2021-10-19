@@ -35,9 +35,8 @@ import { buildSchema } from "type-graphql";
     ],
   });
 
-  server.applyMiddleware({ app, cors: { origin: "*" } });
   await server.start();
-  server.applyMiddleware({ app });
+  server.applyMiddleware({ app, cors: { origin: "*" } });
 
   const PORT = process.env.PORT || 4000;
   httpServer.listen(PORT, () =>
