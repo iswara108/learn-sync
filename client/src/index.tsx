@@ -7,13 +7,19 @@ import { createHttpClient } from "mst-gql";
 import { RootStore, StoreContext } from "./models";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 
-const gqlHttpClient = createHttpClient(`http://192.168.235.88:4000/graphql`, {
-  mode: "cors",
-});
+const gqlHttpClient = createHttpClient(
+  `https://learn-sync.herokuapp.com/graphql`,
+  {
+    mode: "cors",
+  }
+);
 
-const gqlWsClient = new SubscriptionClient(`ws://192.168.235.88:4000/graphql`, {
-  reconnect: true,
-});
+const gqlWsClient = new SubscriptionClient(
+  `wss://learn-sync.herokuapp.com/graphql`,
+  {
+    reconnect: true,
+  }
+);
 
 gqlWsClient.onDisconnected(() => console.log("I am disconnected"));
 gqlWsClient.onConnected(() => console.log("I am connected"));

@@ -16,7 +16,13 @@ import { buildSchema } from "type-graphql";
   const schema = await buildSchema({ resolvers: [MyResolver] });
 
   const subscriptionServer = SubscriptionServer.create(
-    { schema, execute, subscribe },
+    {
+      schema,
+      execute,
+      subscribe,
+      onDisconnect: () => console.log("disconnected client"),
+      onConnect: () => console.log("connected client"),
+    },
     { server: httpServer, path: "/graphql" }
   );
 
