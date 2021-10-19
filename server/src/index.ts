@@ -34,6 +34,8 @@ import { buildSchema } from "type-graphql";
       },
     ],
   });
+
+  server.applyMiddleware({ app, cors: { origin: "*" } });
   await server.start();
   server.applyMiddleware({ app });
 
