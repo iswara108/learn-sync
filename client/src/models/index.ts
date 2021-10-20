@@ -4,5 +4,6 @@
 
 export * from "./MyObjectModel"
 export * from "./InsideObjectModel"
+export * from "./TypingResponseModel"
 export * from "./RootStore"
 export * from "./reactUtils"

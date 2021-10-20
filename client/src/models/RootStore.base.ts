@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 /* This is a mst-gql generated file, don't modify it manually */
 /* eslint-disable */
 /* tslint:disable */
@@ -21,6 +21,14 @@ import {
   insideObjectModelPrimitives,
   InsideObjectModelSelector,
 } from "./InsideObjectModel.base";
+import {
+  TypingResponseModel,
+  TypingResponseModelType,
+} from "./TypingResponseModel";
+import {
+  typingResponseModelPrimitives,
+  TypingResponseModelSelector,
+} from "./TypingResponseModel.base";
 
 /* The TypeScript type that explicits the refs to other models in order to prevent a circular refs issue */
 type Refs = {
@@ -31,10 +39,11 @@ type Refs = {
  * Enums for the names of base graphql actions
  */
 export enum RootStoreBaseQueries {
-  queryGetNames = "queryGetNames",
+  queryGetMessages = "queryGetMessages",
 }
 export enum RootStoreBaseMutations {
   mutateAddNewObject = "mutateAddNewObject",
+  mutateSetIsTyping = "mutateSetIsTyping",
 }
 
 /**
@@ -47,6 +56,7 @@ export const RootStoreBase = withTypedRefs<Refs>()(
         [
           ["MyObject", () => MyObjectModel],
           ["InsideObject", () => InsideObjectModel],
+          ["TypingResponse", () => TypingResponseModel],
         ],
         ["MyObject"],
         "js"
@@ -59,7 +69,7 @@ export const RootStoreBase = withTypedRefs<Refs>()(
       ),
     })
     .actions((self) => ({
-      queryGetNames(
+      queryGetMessages(
         variables?: {},
         resultSelector:
           | string
@@ -68,8 +78,8 @@ export const RootStoreBase = withTypedRefs<Refs>()(
             ) => MyObjectModelSelector) = myObjectModelPrimitives.toString(),
         options: QueryOptions = {}
       ) {
-        return self.query<{ getNames: MyObjectModelType[] }>(
-          `query getNames { getNames {
+        return self.query<{ getMessages: MyObjectModelType[] }>(
+          `query getMessages { getMessages {
         ${
           typeof resultSelector === "function"
             ? resultSelector(new MyObjectModelSelector()).toString()
@@ -90,6 +100,16 @@ export const RootStoreBase = withTypedRefs<Refs>()(
           optimisticUpdate
         );
       },
+      mutateSetIsTyping(
+        variables: { typing: boolean },
+        optimisticUpdate?: () => void
+      ) {
+        return self.mutate<{ setIsTyping: boolean }>(
+          `mutation setIsTyping($typing: Boolean!) { setIsTyping(typing: $typing) }`,
+          variables,
+          optimisticUpdate
+        );
+      },
       subscribeNewMessage(
         variables?: {},
         resultSelector:
@@ -105,6 +125,29 @@ export const RootStoreBase = withTypedRefs<Refs>()(
         ${
           typeof resultSelector === "function"
             ? resultSelector(new MyObjectModelSelector()).toString()
+            : resultSelector
+        }
+      } }`,
+          variables,
+          onData,
+          onError
+        );
+      },
+      subscribeIsTyping(
+        variables?: {},
+        resultSelector:
+          | string
+          | ((
+              qb: TypingResponseModelSelector
+            ) => TypingResponseModelSelector) = typingResponseModelPrimitives.toString(),
+        onData?: (item: any) => void,
+        onError?: (error: Error) => void
+      ) {
+        return self.subscribe<{ isTyping: TypingResponseModelType }>(
+          `subscription isTyping { isTyping {
+        ${
+          typeof resultSelector === "function"
+            ? resultSelector(new TypingResponseModelSelector()).toString()
             : resultSelector
         }
       } }`,

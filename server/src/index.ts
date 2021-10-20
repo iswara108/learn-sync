@@ -27,6 +27,7 @@ import { buildSchema } from "type-graphql";
   );
 
   const server = new ApolloServer({
+    context: ({ req }) => ({ req }),
     schema,
     plugins: [
       {

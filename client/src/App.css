@@ -4,14 +4,11 @@ body {
 
 .a-message {
   padding: 1rem;
-  display: flex;
+  display: grid;
+  grid-template-columns: min-content max-content max-content;
 }
 
-.a-message__id {
-  padding: 1rem;
-}
-
-.a-message__message {
+.a-message > * {
   padding: 1rem;
 }
 

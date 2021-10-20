@@ -4,7 +4,7 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createHttpClient } from "mst-gql";
-import { RootStore, StoreContext } from "./models";
+import { MyObjectModelType, RootStore, StoreContext } from "./models";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 
 const gqlHttpClient = createHttpClient(
@@ -29,12 +29,22 @@ gqlWsClient.onConnected(() =>
 );
 gqlWsClient.onReconnected(() => {
   console.log(new Date().toISOString(), "I am reconnected");
-  store.queryGetNames();
+  store.queryGetMessages();
 });
 
 const store = RootStore.create(undefined, { gqlHttpClient, gqlWsClient });
 
-store.queryGetNames();
+store.queryGetMessages().then(() => {
+  store.subscribeNewMessage(
+    undefined,
+    (s) => s.message.id.author,
+    (item: MyObjectModelType) => {
+      store.add(item);
+      // show message
+      console.log(item);
+    }
+  );
+});
 
 (window as any).store = store;
 ReactDOM.render(

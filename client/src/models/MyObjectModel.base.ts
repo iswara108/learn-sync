@@ -1,4 +1,4 @@
-// @ts-nocheck
+//@ts-nocheck
 /* This is a mst-gql generated file, don't modify it manually */
 /* eslint-disable */
 /* tslint:disable */
@@ -24,6 +24,7 @@ export const MyObjectModelBase = ModelBase.named("MyObject")
       types.late((): any => InsideObjectModel)
     ),
     id: types.identifier,
+    author: types.union(types.undefined, types.string),
   })
   .views((self) => ({
     get store() {
@@ -38,6 +39,9 @@ export class MyObjectModelSelector extends QueryBuilder {
   get id() {
     return this.__attr(`id`);
   }
+  get author() {
+    return this.__attr(`author`);
+  }
   insideObject(
     builder?:
       | string
@@ -51,4 +55,4 @@ export function selectFromMyObject() {
   return new MyObjectModelSelector();
 }
 
-export const myObjectModelPrimitives = selectFromMyObject().message;
+export const myObjectModelPrimitives = selectFromMyObject().message.author;
