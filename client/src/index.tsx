@@ -27,9 +27,10 @@ gqlWsClient.onDisconnected(() =>
 gqlWsClient.onConnected(() =>
   console.log(new Date().toISOString(), "I am connected")
 );
-gqlWsClient.onReconnected(() =>
-  console.log(new Date().toISOString(), "I am reconnected")
-);
+gqlWsClient.onReconnected(() => {
+  console.log(new Date().toISOString(), "I am reconnected");
+  store.queryGetNames();
+});
 
 const store = RootStore.create(undefined, { gqlHttpClient, gqlWsClient });
 
