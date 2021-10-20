@@ -43,15 +43,17 @@ function App() {
   return (
     <>
       <h1>Chat</h1>
-      {Array.from(store.myObjects.values()).map((object) => {
-        return (
-          <div className="a-message">
-            <div className="a-message__id">{object.id}</div>
-            <div className="a-message__author">{object.author}</div>
-            <div className="a-message__message">{object.message}</div>
-          </div>
-        );
-      })}
+      <div className="messages">
+        {Array.from(store.myObjects.values()).map((object) => {
+          return (
+            <div className="a-message">
+              <div className="a-message__id">{object.id}</div>
+              <div className="a-message__author">{object.author}</div>
+              <div className="a-message__message">{object.message}</div>
+            </div>
+          );
+        })}
+      </div>
       <form
         className="submit-area"
         onSubmit={(e) => {

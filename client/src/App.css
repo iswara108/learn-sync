@@ -1,5 +1,11 @@
 body {
-  width: 60rem;
+  width: min(60rem, 100%);
+  display: flex;
+  flex-direction: column;
+}
+
+.messages {
+  flex: 1, 0, 40rem;
 }
 
 .a-message {
@@ -18,4 +24,8 @@ body {
 
 .submit-area__input {
   flex: 1;
+}
+
+.typing-data {
+  flex: 1, 0, 6rem;
 }
