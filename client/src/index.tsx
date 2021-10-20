@@ -21,9 +21,15 @@ const gqlWsClient = new SubscriptionClient(
   }
 );
 
-gqlWsClient.onDisconnected(() => console.log("I am disconnected"));
-gqlWsClient.onConnected(() => console.log("I am connected"));
-gqlWsClient.onReconnected(() => console.log("I am reconnected"));
+gqlWsClient.onDisconnected(() =>
+  console.log(new Date().toISOString(), "I am disconnected")
+);
+gqlWsClient.onConnected(() =>
+  console.log(new Date().toISOString(), "I am connected")
+);
+gqlWsClient.onReconnected(() =>
+  console.log(new Date().toISOString(), "I am reconnected")
+);
 
 const store = RootStore.create(undefined, { gqlHttpClient, gqlWsClient });
 
