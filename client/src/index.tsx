@@ -8,14 +8,14 @@ import { RootStore, StoreContext } from "./models";
 import { SubscriptionClient } from "subscriptions-transport-ws";
 
 const gqlHttpClient = createHttpClient(
-  `https://learn-sync.herokuapp.com/graphql`,
+  `http${process.env.REACT_APP_SERVER}/graphql`,
   {
     mode: "cors",
   }
 );
 
 const gqlWsClient = new SubscriptionClient(
-  `wss://learn-sync.herokuapp.com/graphql`,
+  `ws${process.env.REACT_APP_SERVER}/graphql`,
   {
     reconnect: true,
   }
@@ -27,6 +27,9 @@ gqlWsClient.onReconnected(() => console.log("I am reconnected"));
 
 const store = RootStore.create(undefined, { gqlHttpClient, gqlWsClient });
 
+store.queryGetNames();
+
+(window as any).store = store;
 ReactDOM.render(
   <React.StrictMode>
     <StoreContext.Provider value={store}>

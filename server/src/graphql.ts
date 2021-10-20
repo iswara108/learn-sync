@@ -9,9 +9,10 @@ import {
   Resolver,
   Root,
   Subscription,
+  ID,
 } from "type-graphql";
 
-type NotificationPayload = { newName: string };
+type NotificationPayload = { newMessage: string; id: number };
 
 @ObjectType()
 export class InsideObject {
@@ -22,40 +23,50 @@ export class InsideObject {
 @ObjectType()
 export class MyObject {
   @Field(() => String)
-  name: string;
+  message: string;
 
-  @Field(() => InsideObject)
-  insideObject: InsideObject;
+  @Field(() => InsideObject, { nullable: true })
+  insideObject?: InsideObject;
+
+  @Field(() => ID)
+  id: number;
 }
 
 @Resolver()
 export class MyResolver {
-  @Query(() => MyObject)
+  store: MyObject[];
+
+  @Query(() => [MyObject])
   getNames() {
-    return Object.assign<MyObject, MyObject>(new MyObject(), {
-      name: "hi",
-      insideObject: Object.assign<InsideObject, InsideObject>(
-        new InsideObject(),
-        { dateOfBirth: new Date("1981-10-06") }
-      ),
-    });
+    return this.store;
   }
 
   @Subscription({ topics: "NOTIFICATIONS" })
-  newName(@Root() notificationPayload: NotificationPayload): MyObject {
+  newMessage(@Root() notificationPayload: NotificationPayload): MyObject {
     return Object.assign<MyObject, MyObject>(new MyObject(), {
-      name: notificationPayload.newName,
-      insideObject: Object.assign<InsideObject, InsideObject>(
-        new InsideObject(),
-        { dateOfBirth: new Date("1981-10-06") }
-      ),
+      message: notificationPayload.newMessage,
+      id: notificationPayload.id,
     });
   }
 
   @Mutation(() => Boolean)
-  addNewObject(@Arg("name") aName: string, @PubSub() pubSub: PubSubEngine) {
-    console.log(aName);
-    pubSub.publish("NOTIFICATIONS", { newName: aName });
+  addNewObject(
+    @Arg("message") aMessage: string,
+    @PubSub() pubSub: PubSubEngine
+  ) {
+    if (!this.store) this.store = [];
+    this.store.push(
+      Object.assign<MyObject, MyObject>(new MyObject(), {
+        message: aMessage,
+        id: this.store.length + 1,
+      })
+    );
+    pubSub.publish("NOTIFICATIONS", {
+      newMessage: aMessage,
+      id: this.store.length + 1,
+    } as NotificationPayload);
+
+    console.log(this.store);
     return true;
   }
 }

@@ -1,50 +1,56 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import {
-  InsideObjectModelType,
-  MyObjectModelType,
-  StoreContext,
-} from "./models";
-
+import { MyObjectModelType, StoreContext } from "./models";
+import { observer } from "mobx-react-lite";
 function App() {
   const store = React.useContext(StoreContext);
 
   React.useEffect(
     () =>
-      store.subscribeNewName(
+      store.subscribeNewMessage(
         undefined,
-        (s) => s.name.insideObject((i) => i.dateOfBirth),
-        (item: MyObjectModelType) =>
-          alert(
-            (item.insideObject as InsideObjectModelType | undefined)
-              ?.dateOfBirth
-          )
+        (s) => s.message.id,
+        (item: MyObjectModelType) => {
+          store.add(item);
+          // show message
+          console.log(item);
+        }
       ),
     [store]
   );
 
+  const [input, setInput] = React.useState("");
+
   return (
-    <div className="App">
-      <button onClick={() => store.mutateAddNewObject({ name: "Om Om" })}>
-        Mutate Name
-      </button>
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <h1>Chat</h1>
+      {Array.from(store.myObjects.values()).map((object) => {
+        return (
+          <div className="a-message">
+            <div className="a-message__id">{object.id}</div>
+            <div className="a-message__message">{object.message}</div>
+          </div>
+        );
+      })}
+      <form
+        className="submit-area"
+        onSubmit={(e) => {
+          e.preventDefault();
+          store.mutateAddNewObject({
+            message: input,
+          });
+        }}
+      >
+        <input
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          type="text"
+          className="submit-area__input"
+        />{" "}
+        <button type="submit">Submit</button>
+      </form>
+    </>
   );
 }
 
-export default App;
+export default observer(App);

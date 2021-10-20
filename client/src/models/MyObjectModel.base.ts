@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 /* This is a mst-gql generated file, don't modify it manually */
 /* eslint-disable */
 /* tslint:disable */
@@ -17,11 +17,13 @@ import { RootStoreType } from "./index";
 export const MyObjectModelBase = ModelBase.named("MyObject")
   .props({
     __typename: types.optional(types.literal("MyObject"), "MyObject"),
-    name: types.union(types.undefined, types.string),
+    message: types.union(types.undefined, types.string),
     insideObject: types.union(
       types.undefined,
+      types.null,
       types.late((): any => InsideObjectModel)
     ),
+    id: types.identifier,
   })
   .views((self) => ({
     get store() {
@@ -30,8 +32,11 @@ export const MyObjectModelBase = ModelBase.named("MyObject")
   }));
 
 export class MyObjectModelSelector extends QueryBuilder {
-  get name() {
-    return this.__attr(`name`);
+  get message() {
+    return this.__attr(`message`);
+  }
+  get id() {
+    return this.__attr(`id`);
   }
   insideObject(
     builder?:
@@ -46,4 +51,4 @@ export function selectFromMyObject() {
   return new MyObjectModelSelector();
 }
 
-export const myObjectModelPrimitives = selectFromMyObject().name;
+export const myObjectModelPrimitives = selectFromMyObject().message;

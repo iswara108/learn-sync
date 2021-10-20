@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-nocheck
 /* This is a mst-gql generated file, don't modify it manually */
 /* eslint-disable */
 /* tslint:disable */
@@ -23,7 +23,9 @@ import {
 } from "./InsideObjectModel.base";
 
 /* The TypeScript type that explicits the refs to other models in order to prevent a circular refs issue */
-type Refs = {};
+type Refs = {
+  myObjects: ObservableMap<string, MyObjectModelType>;
+};
 
 /**
  * Enums for the names of base graphql actions
@@ -46,11 +48,16 @@ export const RootStoreBase = withTypedRefs<Refs>()(
           ["MyObject", () => MyObjectModel],
           ["InsideObject", () => InsideObjectModel],
         ],
-        [],
+        ["MyObject"],
         "js"
       )
     )
-    .props({})
+    .props({
+      myObjects: types.optional(
+        types.map(types.late((): any => MyObjectModel)),
+        {}
+      ),
+    })
     .actions((self) => ({
       queryGetNames(
         variables?: {},
@@ -61,7 +68,7 @@ export const RootStoreBase = withTypedRefs<Refs>()(
             ) => MyObjectModelSelector) = myObjectModelPrimitives.toString(),
         options: QueryOptions = {}
       ) {
-        return self.query<{ getNames: MyObjectModelType }>(
+        return self.query<{ getNames: MyObjectModelType[] }>(
           `query getNames { getNames {
         ${
           typeof resultSelector === "function"
@@ -74,16 +81,16 @@ export const RootStoreBase = withTypedRefs<Refs>()(
         );
       },
       mutateAddNewObject(
-        variables: { name: string },
+        variables: { message: string },
         optimisticUpdate?: () => void
       ) {
         return self.mutate<{ addNewObject: boolean }>(
-          `mutation addNewObject($name: String!) { addNewObject(name: $name) }`,
+          `mutation addNewObject($message: String!) { addNewObject(message: $message) }`,
           variables,
           optimisticUpdate
         );
       },
-      subscribeNewName(
+      subscribeNewMessage(
         variables?: {},
         resultSelector:
           | string
@@ -93,8 +100,8 @@ export const RootStoreBase = withTypedRefs<Refs>()(
         onData?: (item: any) => void,
         onError?: (error: Error) => void
       ) {
-        return self.subscribe<{ newName: MyObjectModelType }>(
-          `subscription newName { newName {
+        return self.subscribe<{ newMessage: MyObjectModelType }>(
+          `subscription newMessage { newMessage {
         ${
           typeof resultSelector === "function"
             ? resultSelector(new MyObjectModelSelector()).toString()
