@@ -13,7 +13,7 @@ import {
   Ctx,
 } from "type-graphql";
 import { ExpressContext } from "apollo-server-express";
-type NotificationPayload = { newMessage: string; id: number };
+type NotificationPayload = { newMessage: string; id: number; author: string };
 type TypingPayload = { author: string; typing: boolean };
 
 @ObjectType()
@@ -57,14 +57,11 @@ export class MyResolver {
   }
 
   @Subscription({ topics: "NOTIFICATIONS" })
-  newMessage(
-    @Root() notificationPayload: NotificationPayload,
-    @Ctx() ctx: ExpressContext
-  ): MyObject {
+  newMessage(@Root() notificationPayload: NotificationPayload): MyObject {
     return Object.assign<MyObject, MyObject>(new MyObject(), {
       message: notificationPayload.newMessage,
       id: notificationPayload.id,
-      author: ctx.req.headers["user-agent"] || "UNIDENTIFIED",
+      author: notificationPayload.author,
     });
   }
 
@@ -79,12 +76,13 @@ export class MyResolver {
       Object.assign<MyObject, MyObject>(new MyObject(), {
         message: aMessage,
         id: this.store.length + 1,
-        author: ctx.req.headers["user-agent"] || "UNIDENTIFIED",
+        author: ctx.req?.headers["user-agent"] || "UNIDENTIFIED",
       })
     );
     pubSub.publish("NOTIFICATIONS", {
       newMessage: aMessage,
       id: this.store.length + 1,
+      author: ctx.req?.headers["user-agent"] || "UNIDENTIFIED",
     } as NotificationPayload);
 
     console.log(this.store);
